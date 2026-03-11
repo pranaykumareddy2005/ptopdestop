@@ -68,6 +68,9 @@ class UDPReceiver:
             except Exception:
                 pass
             self._sock = None
+        if self._thread and self._thread.is_alive():
+            self._thread.join(timeout=2.0)
+        self._thread = None
 
 
 def send_chunked_udp(payload: bytes, ip: str, port: int, job_id: str, frame_index: int) -> None:

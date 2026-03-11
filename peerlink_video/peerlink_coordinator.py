@@ -132,6 +132,13 @@ class PeerlinkCoordinator:
         _height: int = 0,
         process_local_fallback: bool = True,
     ) -> dict[int, bytes]:
+        # region agent log
+        try:
+            from ._debug_log import agent_log
+            agent_log("coordinator.distribute_frames", "enter", {"n_frames": len(frame_paths), "runId": "repro"}, "H2")
+        except Exception:
+            pass
+        # endregion
         self._cancel_requested = False
         with self._lock:
             self._job_generation += 1
@@ -203,7 +210,15 @@ class PeerlinkCoordinator:
             self._emit_progress()
 
         with self._results_lock:
-            return dict(self._results)
+            out = dict(self._results)
+        # region agent log
+        try:
+            from ._debug_log import agent_log
+            agent_log("coordinator.distribute_frames", "exit", {"n_results": len(out), "cancelled": self._cancel_requested, "runId": "repro"}, "H2")
+        except Exception:
+            pass
+        # endregion
+        return out
 
     def _process_local(self, i: int, path: str, generation: int) -> None:
         import cv2

@@ -127,7 +127,19 @@ class PeerlinkWorker:
             frame = bytes_to_frame_png(data)
             out = process_frame(frame)
             out_bytes = frame_to_bytes_png(out)
-        except Exception:
+        except Exception as _e:
+            # region agent log
+            try:
+                from ._debug_log import agent_log
+                agent_log(
+                    "worker._run_yolo_and_reply",
+                    "decode_or_yolo_failed",
+                    {"frame_index": frame_index, "exc_type": type(_e).__name__, "runId": "repro"},
+                    "H3",
+                )
+            except Exception:
+                pass
+            # endregion
             with self._lock:
                 self._metrics.deposit(False, 0)
             with self._pending_lock:

@@ -41,7 +41,9 @@ def parse_json_message(data: bytes) -> tuple[MsgType, dict[str, Any]] | None:
     msg_type = MsgType(struct.unpack("!H", data[len(MAGIC) : len(MAGIC) + 2])[0])
     try:
         obj = json.loads(data[len(MAGIC) + 2 :].decode("utf-8"))
-        return msg_type, obj.get("p", {})
+        if not isinstance(obj, dict):
+            return None
+        return msg_type, obj.get("p") if isinstance(obj.get("p"), dict) else {}
     except Exception:
         return None
 

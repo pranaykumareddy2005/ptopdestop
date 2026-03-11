@@ -779,8 +779,31 @@ class App(ctk.CTk):
 
 
 def main() -> None:
-    app = App()
-    app.mainloop()
+    # region agent log
+    try:
+        from peerlink_video._debug_log import agent_log
+        agent_log("main.py:main", "GUI main entry", {"runId": "repro"}, "H1")
+    except Exception:
+        pass
+    # endregion
+    try:
+        app = App()
+        app.mainloop()
+    except Exception as e:
+        # region agent log
+        try:
+            from peerlink_video._debug_log import agent_log
+            import traceback
+            agent_log(
+                "main.py:main",
+                "GUI crash",
+                {"runId": "repro", "exc_type": type(e).__name__, "traceback": traceback.format_exc()[-2000:]},
+                "H1",
+            )
+        except Exception:
+            pass
+        # endregion
+        raise
 
 
 if __name__ == "__main__":

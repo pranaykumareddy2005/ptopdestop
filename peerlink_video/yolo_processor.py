@@ -74,9 +74,13 @@ def process_frame_yolo(
 
 def process_frame(frame_bgr: np.ndarray) -> np.ndarray:
     """Default pipeline entry: YOLO if available, else grayscale fallback."""
+    if frame_bgr is None or frame_bgr.size == 0:
+        raise ValueError("process_frame: empty frame")
     try:
         return process_frame_yolo(frame_bgr)
     except Exception:
         import cv2
+        if len(frame_bgr.shape) < 2:
+            raise
         gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
         return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)

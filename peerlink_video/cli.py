@@ -17,6 +17,13 @@ def _ensure_root_on_path() -> None:
 def cmd_process(args: argparse.Namespace) -> int:
     """Headless pipeline: extract → distribute (local fallback) → combine."""
     _ensure_root_on_path()
+    # region agent log
+    try:
+        from peerlink_video._debug_log import agent_log
+        agent_log("cli.cmd_process", "enter", {"video": args.video, "runId": "repro"}, "H4")
+    except Exception:
+        pass
+    # endregion
     from peerlink_video.config import APP_NAME
     from peerlink_video.peerlink_coordinator import PeerlinkCoordinator
     from peerlink_video.video_split import extract_frames, combine_frames, bytes_to_frame_png
@@ -46,6 +53,13 @@ def cmd_process(args: argparse.Namespace) -> int:
         try:
             combine_frames([bytes_to_frame_png(b) for b in ordered], out_path, fps, (w, h))
         except Exception as ex:
+            # region agent log
+            try:
+                from peerlink_video._debug_log import agent_log
+                agent_log("cli.cmd_process", "combine_failed", {"exc": type(ex).__name__, "runId": "repro"}, "H4")
+            except Exception:
+                pass
+            # endregion
             print("Combine failed:", ex, file=sys.stderr)
             return 2
         print("OK:", out_path)
@@ -63,6 +77,13 @@ def cmd_process(args: argparse.Namespace) -> int:
 def launch() -> None:
     """GUI entry point for console script peerlink-video (no args)."""
     _ensure_root_on_path()
+    # region agent log
+    try:
+        from peerlink_video._debug_log import agent_log
+        agent_log("cli.launch", "enter_gui", {"runId": "repro"}, "H1")
+    except Exception:
+        pass
+    # endregion
     from main import main as run_app
     run_app()
 

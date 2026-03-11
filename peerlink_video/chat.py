@@ -16,6 +16,8 @@ class ChatService:
         self._rx: UDPReceiver | None = None
 
     def start(self) -> None:
+        if self._rx is not None:
+            self.stop()
         def on_data(data: bytes, addr):
             parsed = parse_json_message(data)
             if not parsed or parsed[0] != MsgType.CHAT:

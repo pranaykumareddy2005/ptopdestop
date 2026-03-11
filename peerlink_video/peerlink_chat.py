@@ -1,11 +1,13 @@
 """Chat via PeerLink call('ALL', ...) or unicast."""
 from __future__ import annotations
 
+from typing import Callable
+
 from peerlink import PeerNode
 
 
 class PeerlinkChat:
-    def __init__(self, node: PeerNode, on_message: callable | None = None):
+    def __init__(self, node: PeerNode, on_message: Callable[[str, str], None] | None = None):
         self._node = node
         self._on_message = on_message or (lambda _s, _t: None)
         # Each peer registers chat_append; broadcaster calls ALL

@@ -178,6 +178,10 @@ def bytes_to_frame_png(data: bytes) -> np.ndarray:
 
 
 def combine_frames(frame_paths_or_arrays: list, out_path: str, fps: float, size: tuple[int, int]) -> None:
+    w, h = int(size[0]), int(size[1])
+    if w < 1 or h < 1:
+        raise ValueError("combine_frames: size must be positive (w, h)")
+    size = (w, h)
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     writer = cv2.VideoWriter(out_path, fourcc, fps, size)
     if not writer.isOpened():

@@ -29,6 +29,9 @@ Thumbs.db
 *.db
 debug-*.log
 *.mp4
+# Debug capture artifacts (keep local)
+peerlink_stderr*.txt
+_debug_test.mp4
 
 # Local / secrets
 .env
