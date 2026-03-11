@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Weights (download via ultralytics / PEERLINK_YOLO_MODEL)
+*.pt
+*.onnx
+*.engine
+
+# App / debug
+*.db
+debug-*.log
+*.mp4
+
+# Local / secrets
+.env
+*.local

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peerlink-video-app"
+version = "0.3.0"
+description = "Distributed video processing over LAN with PeerLink + YOLO"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "customtkinter>=5.2.0",
+    "Pillow>=10.0.0",
+    "matplotlib>=3.7.0",
+    "peerlink>=1.0.0",
+    "ultralytics>=8.0.0",
+    "torch>=2.0.0",
+]
+
+[project.scripts]
+peerlink-video = "peerlink_video.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["peerlink_video*"]
+
+[tool.setuptools.package-data]
+peerlink_video = ["py.typed"]
